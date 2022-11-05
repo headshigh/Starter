@@ -42,14 +42,27 @@ const getproduct = async (req, res) => {
   }
 };
 const getallproduct = async (req, res) => {
-  try {
-    var sortString = req.query.sort && req.query.sort.split(",").join(" ");
-    if (!sortString) sortString = " ";
-    // console.log(sortString);
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    let product1 = product.find({}).sort(sortString);
+  // try {
+  var sortString = req.query.sort && req.query.sort.split(",").join(" ");
+  if (!sortString) sortString = " ";
+  // console.log(sortString);
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const qCategory = req.query.category;
+  console.log(qCategory);
+  let product1;
+  const queryObject = {};
+  // const queryobject = {};
+  if (qCategory) {
+    queryObject.category = qCategory;
+    if (req.query.size) {
+      queryObject.size = req.query.size;
+    }
+    if (req.query.color) {
+      queryObject.color = req.query.color;
+    }
+    product1 = product1.find(queryObject).sort(sortString);
     product1 = product1.skip(skip).limit(limit);
     const products = await product1;
     if (!products) {
@@ -58,8 +71,8 @@ const getallproduct = async (req, res) => {
       // const { password, ...others } = products._doc;
       res.status(200).json({ products: products });
     }
-  } catch (err) {
-    console.log(err);
+    // } catch (err) {
+    // console.log(err);
   }
 };
 const deleteproduct = async (req, res) => {

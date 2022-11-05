@@ -16,7 +16,7 @@ const express = require("express");
 const router = express.Router();
 //routes
 
-router.route("/").post(verifyTokenAndAdmin, createproduct).get(getallproduct);
+router.route("/").post(createproduct).get(getallproduct);
 router
   .route("/:id")
   .patch(verifyTokenAndAdmin, updateproduct)
